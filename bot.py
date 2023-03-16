@@ -21,7 +21,7 @@ dp = Dispatcher(bot)
 messages = []
 
 async def start_bot(_):
-    print('Бот запущен, вот, не теряй https://t.me/Vissell_bot')
+    print('Бот запущен, вот, не теряй')
 
 
 @dp.message_handler(commands=['start'])
