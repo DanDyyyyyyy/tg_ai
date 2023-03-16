@@ -1,9 +1,14 @@
+from asyncio import exceptions
+
 import openai
 from aiogram import Bot, types
-from aiogram.dispatcher import Dispatcher
+from aiogram.dispatcher import Dispatcher#, FSMContext
 from aiogram.utils import executor
-from keyboards import KEYBOARD, INLINE_KB_AHAHA
+from keyboards import KEYBOARD, INLINE_KB_REPEAT, INLINE_KB_CRAP
 from dallee import prompt, get_Image
+#from dallee import get_Image
+
+from aiogram.utils.markdown import hide_link
 
 from config import telegram_token, openai_api_key
 
@@ -15,50 +20,52 @@ dp = Dispatcher(bot)
 
 messages = []
 
-
 async def start_bot(_):
-    print('Бот запущен, вот, не теряй ')
-
-
-# получаем клавиатуру
-def get_address_keyboard():
-    get_keyboard = types.ReplyKeyboardMarkup(
-        input_field_placeholder="Тыкни",
-        one_time_keyboard=True
-    )
-    button = types.KeyboardButton(
-        "тык сюда",
-        request_location=True,
-        one_time_keyboard=True)
-    get_keyboard.add(button)
-    return get_keyboard
+    print('Бот запущен, вот, не теряй https://t.me/Vissell_bot')
 
 
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
     await bot.send_message(message.from_user.id,
-                           """Привет! Я бот с ChatGPt, просто напиши мне сообщение и я что-нибудь тебе отвечу\n 
-                           или выбери что-то из выпадающего списка""")
+                           "Привет! Выбери, что именно ты бы хотел получить от меня. Приятный разговор или отменный рисунок.")
     await message.answer('Здесь можно выбрать мои дополнительные функции', reply_markup=KEYBOARD)
+    # удаляем клавиатуру
+    # try:
+    #     # Пытаемся удалить кнопку
+    #     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id - 1)
+    # except exceptions.MessageToDeleteNotFound:
+    #     # Если кнопка уже удалена, то продолжаем выполнение кода
+    #
+    #     pass
 
 
-@dp.message_handler(text='Разговор по душам с роботом')
+# Чат бот # все работает - верни
+# @dp.message_handler(text='Разговор по душам с роботом')
+# #@dp.message_handler()
+# async def send(message: types.Message):
+#     await bot.send_message(message.from_user.id)
+#     messages.append({"role": "user", "content": message.text})
+#     completion = openai.ChatCompletion.create(
+#         model="gpt-3.5-turbo",
+#         messages=messages
+#     )
+#     response = completion.choices[0].message.content
+#     messages.append({"role": "assistant", "content": response}) #здесь response позволяет не терять контекст
+#
+#     await message.answer(completion.choices[0].message.content)
+
+#затычка для первой кнопки
+@dp.message_handler(text = 'Разговор по душам с роботом')
+async def process_guess_int_command(message: types.Message):
+    await message.reply('Все работает, но это временная затычка, ибо кнопки пока не очень дружат', reply_markup=INLINE_KB_CRAP)
+
+
+#Получение изображения
+@dp.message_handler(text='Покажу тебе картинку, но не пошлую') #декоратор - действие, которое его вызывает
+@dp.message_handler()
 async def send(message: types.Message):
-    messages.append({"role": "user", "content": message.text})
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=messages
-    )
-    response = completion.choices[0].message.content
-    messages.append({"role": "assistant", "content": response})
-
-    await message.answer(completion.choices[0].message.content)
-
-
-@dp.message_handler(text='Покажу тебе картинку, но не пошлую')
-async def send(message: types.Message):
-    #messages.append()
-    await bot.send_message(message.from_user.id, get_Image(prompt))
+    prompt = message.text
+    await bot.send_photo(chat_id=message.chat.id, photo=get_Image(prompt))
 
 
 # Запуск процесса поллинга новых апдейтов

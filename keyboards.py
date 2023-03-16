@@ -13,7 +13,7 @@ KEYBOARD = types.ReplyKeyboardMarkup(
     input_field_placeholder="Ну выбери уже что-нибудь"
     )
 
-inline_btn_ahaha = InlineKeyboardButton('ахахахаха', callback_data='button1')
-INLINE_KB_AHAHA = InlineKeyboardMarkup().add(inline_btn_ahaha)
+inline_btn_repeat = InlineKeyboardButton('Хочу попробовать еще раз', callback_data='button1')
+INLINE_KB_REPEAT = InlineKeyboardMarkup().add(inline_btn_repeat)
 inline_btn_crap = InlineKeyboardButton('отстой(((', callback_data='button2')
 INLINE_KB_CRAP = InlineKeyboardMarkup().add(inline_btn_crap)
