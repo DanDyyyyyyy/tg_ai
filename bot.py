@@ -39,20 +39,20 @@ async def process_start_command(message: types.Message):
     #     pass
 
 
-# Чат бот # все работает - верни
-# @dp.message_handler(text='Разговор по душам с роботом')
-# #@dp.message_handler()
-# async def send(message: types.Message):
-#     await bot.send_message(message.from_user.id)
-#     messages.append({"role": "user", "content": message.text})
-#     completion = openai.ChatCompletion.create(
-#         model="gpt-3.5-turbo",
-#         messages=messages
-#     )
-#     response = completion.choices[0].message.content
-#     messages.append({"role": "assistant", "content": response}) #здесь response позволяет не терять контекст
-#
-#     await message.answer(completion.choices[0].message.content)
+# Чат бот
+@dp.message_handler(text='Разговор по душам с роботом')
+#@dp.message_handler()
+async def send(message: types.Message):
+    await bot.send_message(message.from_user.id)
+    messages.append({"role": "user", "content": message.text})
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
+    )
+    response = completion.choices[0].message.content
+    messages.append({"role": "assistant", "content": response}) #здесь response позволяет не терять контекст
+
+    await message.answer(completion.choices[0].message.content)
 
 #затычка для первой кнопки
 @dp.message_handler(text = 'Разговор по душам с роботом')
