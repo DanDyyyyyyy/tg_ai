@@ -7,7 +7,7 @@ openai.api_key = openai_api_key
 prompt = []
 
 
-# Generate an image
+# Генерация изображения
 def get_Image(prompt):
     response = openai.Image.create(
         prompt=str(prompt),
